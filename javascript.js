@@ -52,25 +52,43 @@ function resultMessage(playerSelection, result) {
         }
     }
 }
+let win = 0;
+let lose = 0;
 
-function game() {
-    let win = 0;
-    let lose = 0
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = prompt("Make your move rock, paper, or scissors").toLowerCase();
-        const computerSelection = computerPlay();
-        const result = playRound(computerSelection,playerSelection);
-        console.log(resultMessage(playerSelection, result));
-        if (result === "win") {
-            win++;
-        } else if (result === "lose") {
-            lose++;
-        }
+function game(playerSelection) {
+
+    const computerSelection = computerPlay();
+    const result = playRound(computerSelection,playerSelection);
+    if (result === "win") {
+        win++;
+    } else if (result === "lose") {
+        lose++;
     }
-    console.log(`The score is ${win}-${lose}`)
-    if (win > lose) {
-        console.log("You beat the game!!");
-    } else console.log("You lost the game!")
+    const container = document.querySelector("#result");
+    const returnResult = document.createElement("p");
+    returnResult.textContent = resultMessage(playerSelection, result);
+    returnResult.textContent += (` The score is ${win}-${lose}.`)
+
+    container.appendChild(returnResult);
+
+    if (win === 5) {
+        const endGame = document.createElement("p");
+        endGame.textContent = "You beat the game!";
+
+        container.appendChild(endGame);
+    } else if (lose === 5) {
+        const endGame = document.createElement("p");
+        endGame.textContent = "You lost the game!";
+
+        container.appendChild(endGame);
+    }
+
+    
 }
 
-game()
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    game(button.id);
+  });
+});
